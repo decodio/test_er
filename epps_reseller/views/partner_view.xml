@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="partner_reseller_order_action" model="ir.actions.act_window">
+        <field name="name">Reseller Orders</field>
+        <field name="res_model">reseller.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_partner_id': active_id}</field>
+    </record>
+    
+    
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">reseller.order.res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='buttons']" position="inside">
+                <button class="oe_inline oe_stat_button" type="action"
+                    name="%(epps_reseller.partner_reseller_order_action)d"
+                    icon="fa-list">
+                    <field string="" name="reseller_order_count" widget="statinfo"/>
+                </button>
+            </xpath>
+             <xpath expr="//notebook" position="inside">
+                <page string="Reseller Orders">
+                    <field name="reseller_order_ids" nolabel="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</data>
+</openerp>
