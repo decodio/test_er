@@ -22,33 +22,35 @@ from openerp import models, fields, api
 
 
 class ResellerOrder(models.Model):
+    """Reseller Order management"""
     _name = 'reseller.order'
 
     name = fields.Char('Order number',
-        default='/',
-        readonly=True,
-        required=True
-        )
+                       default='/',
+                       readonly=True,
+                       required=True
+                       )
     partner_id = fields.Many2one(
-        comodel_name='res.partner',
-        string='Customer',
-        )
+            comodel_name='res.partner',
+            string='Customer',
+    )
     product_id = fields.Many2one(
-        comodel_name='product.product',
-        string='Package',
-        )
+            comodel_name='product.product',
+            string='Package',
+    )
     order_date = fields.Date(string='Order date')
     canceled_date = fields.Date(string='Canceled date')
     state = fields.Selection(
-        selection=[('draft', 'Draft'),
-                   ('confirmed', 'Confirmed'),
-                   ('active', 'Active'),
-                   ('canceled', 'Canceled')],
-        default='draft'
-        )
+            selection=[('draft', 'Draft'),
+                       ('confirmed', 'Confirmed'),
+                       ('active', 'Active'),
+                       ('canceled', 'Canceled')],
+            default='draft'
+    )
 
     @api.model
     def create(self, vals=None):
+        """ Automatic Order number using sequence"""
         if vals.get('name', '/') == '/':
             vals['name'] = self.env['ir.sequence'].next_by_code('reseller.order')
         res = super(ResellerOrder, self).create(vals)

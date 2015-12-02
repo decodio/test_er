@@ -22,17 +22,19 @@ from openerp import models, fields, api
 
 
 class ResPartner(models.Model):
+    """Extends Partner model with new fields"""
     _inherit = 'res.partner'
 
     @api.one
     @api.depends('reseller_order_ids.partner_id')
-    def _resseller_order_count(self):
+    def _reseller_order_count(self):
+        """Returns total number of resellers orders for one partner (customer)"""
         try:
             self.reseller_order_count = len(self.reseller_order_ids)
-        except:
+        except Exception:
             self.reseller_order_count = 0
 
     reseller_order_ids = fields.One2many(
         'reseller.order', 'partner_id', string='Reseller Orders')
     reseller_order_count = fields.Integer(
-        compute='_resseller_order_count', string="Reseller Orders", readonly=True)
+        compute='_reseller_order_count', string="Reseller Orders", readonly=True)
